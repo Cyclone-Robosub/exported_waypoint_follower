@@ -21,7 +21,7 @@ set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT waypoint_follower_codegen_tes
 ## Path variables
 ###########################################################################
 # Derive an absolute path to the code generation anchor folder.
-get_filename_component(START_DIR .. ABSOLUTE)
+get_filename_component(START_DIR . ABSOLUTE)
 
 # Special directories defined by using CACHE variables can be overridden 
 # by setting the variable from the command line, e.g.,
@@ -46,10 +46,11 @@ find_library(FOUND_LIBM m NO_SYSTEM_ENVIRONMENT_PATH PATHS ${CMAKE_C_IMPLICIT_LI
 ###########################################################################
 
 # Definition of target "waypoint_follower_codegen_test".
-add_executable(waypoint_follower_codegen_test  ${START_DIR}/waypoint_follower_codegen_test_ert_rtw/ert_main.cpp
-    ${START_DIR}/waypoint_follower_codegen_test_ert_rtw/rtGetNaN.cpp
-    ${START_DIR}/waypoint_follower_codegen_test_ert_rtw/rt_nonfinite.cpp
-    ${START_DIR}/waypoint_follower_codegen_test_ert_rtw/waypoint_follower_codegen_test.cpp)
+add_executable(waypoint_follower_codegen_test  
+    ${START_DIR}/src/ert_main.cpp
+    ${START_DIR}/src/rtGetNaN.cpp
+    ${START_DIR}/src/rt_nonfinite.cpp
+    ${START_DIR}/src/waypoint_follower_codegen_test.cpp)
 
 # Set properties for target "waypoint_follower_codegen_test".
 set_target_properties(waypoint_follower_codegen_test PROPERTIES PREFIX ""
@@ -81,12 +82,7 @@ target_compile_definitions(waypoint_follower_codegen_test PRIVATE -DMODEL=waypoi
 
 # Specify include directories for target "waypoint_follower_codegen_test".
 target_include_directories(waypoint_follower_codegen_test PRIVATE ${START_DIR}
-    ${START_DIR}/waypoint_follower_codegen_test_ert_rtw
-    ${MATLAB_ROOT}/extern/include
-    ${MATLAB_ROOT}/simulink/include
-    ${MATLAB_ROOT}/rtw/c/src
-    ${MATLAB_ROOT}/rtw/c/src/ext_mode/common
-    ${MATLAB_ROOT}/rtw/c/ert)
+    ${START_DIR}/src)
 
 # Specify library link dependencies for target 
 # "waypoint_follower_codegen_test". CMake generator expressions are used 
@@ -112,6 +108,8 @@ if(APPLE AND (CMAKE_C_COMPILER_ID STREQUAL "AppleClang"))
             BYPRODUCTS waypoint_follower_codegen_test.dwarf)
 endif()
 
+# Add test subdirectory
+add_subdirectory(test)
 
 ###########################################################################
 ## Build success message
